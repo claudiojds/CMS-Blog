@@ -1,4 +1,4 @@
-## CMS Blog com Next.js
+# Blog CMS Project with Next.js
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
@@ -17,7 +17,7 @@ To learn more about Next.js and deploying to Vercel, check out the following res
 
 A content management system (CMS) built with Next.js to make creating and editing blog posts easier.
 
-# Technologies used
+## Technologies used
 This project uses a suite of modern web development tools:
 
 Next.js – React framework for server-side rendering and static site generation.
