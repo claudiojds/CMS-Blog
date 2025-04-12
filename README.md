@@ -30,6 +30,16 @@ Tailwind CSS – Utility CSS framework for rapid UI development.
 
 styled-components – CSS styling in JS for dynamic and maintainable components.
 
+Ant Desingn - 
+
+Dayjs - 
+
+Auth.js - 
+
+Next-intl
+
+React-quill - instale com o comando "npm install react-quill-new", compativel com React 19 usado no projeto.
+
 Prisma – Modern ORM for type-safe database interactions.
 
 PostgreSQL – Reliable and powerful relational database system.
