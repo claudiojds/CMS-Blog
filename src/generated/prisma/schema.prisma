@@ -1,0 +1,129 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  username      String?   @unique
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  BlogUser  BlogUser[]
+  Posts     Post[] // Relação inversa com o modelo Post
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Blog {
+  id        String     @id @default(cuid())
+  title     String     @db.VarChar(60)
+  subtitle  String?    @db.VarChar(200)
+  slug      String     @db.VarChar(60)
+  bgColor   String     @default("#ffffff") @db.VarChar(45)
+  textColor String     @default("#000000") @db.VarChar(45)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deletedAt DateTime?
+  users     BlogUser[]
+  posts     Post[]
+  // author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@unique([slug])
+  @@map("blogs") //fa com que o model gere uma tabela chamada "blogs" no banco de dados
+}
+
+model BlogUser {
+  id        String   @id @default(cuid())
+  role      Role     @default(AUTHOR)
+  blog      Blog     @relation(fields: [blogId], references: [id]) // Criando uma relação entre o blog e o usuário
+  blogId    String
+  user      User     @relation(fields: [userId], references: [id]) // Criando uma relação entre o blog e o usuário
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([blogId, userId]) // Garante que não haja duplicidade de blog e usuário **não existe no projeto do curso**
+  @@map("blog_users") //faz com que o model gere uma tabela chamada "blog_users" no banco de dados
+}
+
+model Post {
+  id        String    @id @default(cuid())
+  title     String    @db.VarChar(100)
+  subtitle  String?   @db.VarChar(200)
+  slug      String    @db.VarChar(60)
+  body      String    @db.Text
+  blog      Blog      @relation(fields: [blogId], references: [id]) // Criando uma relação entre o blog e o post
+  blogId    String
+  user      User      @relation(fields: [userId], references: [id]) // Criando uma relação entre o blog e o usuário
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@unique([slug])
+  @@map("blog_posts") //faz com que o model gere uma tabela chamada "posts" no banco de dados
+}
+
+// Enums for user
+enum Role {
+  OWNER
+  AUTHOR
+  ADMIN
+  READER
+  EDITOR
+}
