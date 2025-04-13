@@ -30,15 +30,15 @@ Tailwind CSS – Utility CSS framework for rapid UI development.
 
 styled-components – CSS styling in JS for dynamic and maintainable components.
 
-Ant Desingn - 
+Ant Desingn - A comprehensive React UI framework with a set of high-quality, reusable components.
 
-Dayjs - 
+Dayjs - A lightweight JavaScript library for date manipulation with a modern API, compatible with Moment.js.
 
-Auth.js - 
+Auth.js - Flexible and secure authentication for Next.js applications, supporting multiple providers and custom flows.
 
-Next-intl
+Next-intl -  Internationalization library for Next.js that makes it easy to add translations and handle locale-based routing.
 
-React-quill - instale com o comando "npm install react-quill-new", compativel com React 19 usado no projeto.
+React-quill - install with the command "npm install react-quill-new", compatible with React 19 used in the project.
 
 Prisma – Modern ORM for type-safe database interactions.
 

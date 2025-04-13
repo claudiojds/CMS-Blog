@@ -1,12 +1,7 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  // output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -31,34 +26,39 @@ model User {
 }
 
 model Account {
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
+  id                       String  @id @default(cuid())
+  userId                   String  @unique
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? @db.Text
+  access_token             String? @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? @db.Text
+  session_state            String?
+  refresh_token_expires_in Int?
+  user                     User?   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
+  id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model VerificationToken {
@@ -81,7 +81,6 @@ model Blog {
   deletedAt DateTime?
   users  BlogUser[]
   posts  Post[]
-  // author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@unique([slug])
   @@map("blogs") //fa com que o model gere uma tabela chamada "blogs" no banco de dados
@@ -98,7 +97,7 @@ model BlogUser {
   updatedAt DateTime @updatedAt
 
   @@map("blog_users") //faz com que o model gere uma tabela chamada "blog_users" no banco de dados
-  @@unique([blogId, userId]) // Garante que não haja duplicidade de blog e usuário **não existe no projeto do curso**
+  // @@unique([blogId, userId]) // Garante que não haja duplicidade de blog e usuário **não existe no projeto do curso**
 }
 
 model Post {
